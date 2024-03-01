@@ -1,9 +1,11 @@
 package com.example.carros;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,6 +20,10 @@ public class RecycleCarro extends RecyclerView.Adapter<RecycleCarro.ViewHolder> 
 
     public Context ctx;
     public List<Carro> stand;
+    private IOnSacaFoto listener;
+    public void setOnSacaFotoListener(IOnSacaFoto lst){
+        this.listener = lst;
+    }
 
     public RecycleCarro(Context ctx, List<Carro> stand) {
         this.ctx = ctx;
@@ -45,20 +51,40 @@ public class RecycleCarro extends RecyclerView.Adapter<RecycleCarro.ViewHolder> 
     @Override
     public RecycleCarro.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(ctx).inflate(R.layout.itemcarro,parent,false);
+        View v = LayoutInflater.from(ctx).inflate(R.layout.itemcarro, parent, false);
         return new RecycleCarro.ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecycleCarro.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecycleCarro.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Carro carro = stand.get(position);
         holder.editid.setText(String.valueOf(carro.getId()));
         holder.editmodelo.setText(carro.getModelo());
-
+        ArrayAdapter<String> adptcats = new ArrayAdapter<>(
+                ctx,
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                ctx.getResources().getStringArray(R.array.categorias)
+        );
+        adptcats.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+        int poscur = adptcats.getPosition(carro.getCategoria());
+        holder.spincat.setAdapter(adptcats);
+        holder.spincat.setSelection(poscur);
+        if (carro.getFoto().length > 0) {
+            holder.imgfoto.setImageBitmap(Carro.arrayToBitmap(carro.getFoto()));
+        }
+        holder.imgfoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.sacaFoto(position);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return stand.size();
     }
+
+
+
 }

@@ -16,6 +16,7 @@ public class App extends Application {
         super.onCreate();
         ctx = getApplicationContext();
         Log.i(TAG,"App Created");
+        MySQL mysql = new MySQL(ctx);
         criarLista();
         for(Carro c : stand)Log.i(TAG,c.toString());
     }

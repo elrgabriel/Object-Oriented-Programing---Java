@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Carros</string>
+    <array name="categorias">
+        <item>Luxo</item>
+        <item>Desportivo</item>
+        <item>Utilitário</item>
+        <item>Comercial</item>
+    </array>
+</resources>
