@@ -17,7 +17,12 @@ public class App extends Application {
         ctx = getApplicationContext();
         Log.i(TAG,"App Created");
         MySQL mysql = new MySQL(ctx);
-        criarLista();
+        //mysql.inserirCarro(new Carro(1,"Ford Fiesta","Utilitário",new byte[]{}));
+       // mysql.inserirCarro(new Carro(2,"Ferrari","Desportivo",new byte[]{}));
+       // criarLista();
+        App.stand = mysql.carregaLista();
+
+
         for(Carro c : stand)Log.i(TAG,c.toString());
     }
 
